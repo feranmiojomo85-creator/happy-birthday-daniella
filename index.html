@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Daniella! 🎉</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --primary: #d81b60;
+      --primary-light: #ff6090;
+      --primary-dark: #a00037;
+      --accent: #ff4081;
+      --bg-gradient: linear-gradient(135deg, #2a0820 0%, #4a0e36 40%, #1f0418 100%);
+      --card-bg: rgba(255, 255, 255, 0.08);
+      --card-border: rgba(255, 105, 180, 0.3);
+      --gold: #ffd700;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg-gradient);
+      color: #fff;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    #bgCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px 15px 60px 15px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Header Section */
+    .header {
+      text-align: center;
+      padding: 40px 10px 20px 10px;
+      position: relative;
+    }
+
+    .header h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      background: linear-gradient(45deg, #ff80ab, #ff4081, #ffd700, #ff80ab);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientShift 6s ease infinite;
+      text-shadow: 0 0 20px rgba(255, 64, 129, 0.4);
+      margin-bottom: 10px;
+    }
+
+    .subhead {
+      font-size: clamp(1rem, 3vw, 1.3rem);
+      color: #ffb2dd;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Section Styling */
+    .section-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.5rem;
+      text-align: center;
+      color: #ff80ab;
+      margin: 40px 0 20px 0;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 3px;
+      background: var(--accent);
+      margin: 8px auto 0 auto;
+      border-radius: 2px;
+    }
+
+    /* Photos Section */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+      margin-bottom: 50px;
+    }
+
+    .photo-card {
+      background: #fff;
+      padding: 15px 15px 25px 15px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      transform: rotate(var(--rotation, 0deg));
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .photo-card:hover {
+      transform: scale(1.05) rotate(0deg) !important;
+      z-index: 10;
+      box-shadow: 0 15px 35px rgba(255, 64, 129, 0.4);
+    }
+
+    .img-container {
+      width: 100%;
+      height: 280px;
+      background: #fce4ec;
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .img-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .photo-caption {
+      margin-top: 15px;
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.5rem;
+      color: #333;
+      text-align: center;
+    }
+
+    /* Interactive Gift Box */
+    .gift-section {
+      text-align: center;
+      margin: 50px 0;
+    }
+
+    .gift-box-container {
+      width: 140px;
+      height: 140px;
+      margin: 0 auto;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .gift-box {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .gift-lid {
+      width: 110%;
+      height: 30px;
+      background: #e91e63;
+      position: absolute;
+      top: 0;
+      left: -5%;
+      border-radius: 4px;
+      z-index: 2;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: transform 0.5s ease;
+    }
+
+    .gift-body {
+      width: 100%;
+      height: 110px;
+      background: #c2185b;
+      position: absolute;
+      bottom: 0;
+      border-radius: 0 0 6px 6px;
+    }
+
+    .ribbon-v {
+      width: 20px;
+      height: 100%;
+      background: var(--gold);
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .ribbon-h {
+      width: 100%;
+      height: 20px;
+      background: var(--gold);
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .gift-box-container.opened .gift-lid {
+      transform: translateY(-60px) rotate(-15deg);
+    }
+
+    .secret-card {
+      max-width: 500px;
+      margin: 20px auto 0 auto;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 15px;
+      padding: 25px;
+      display: none;
+      animation: fadeIn 0.8s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .secret-card h3 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2rem;
+      color: #ff80ab;
+      margin-bottom: 10px;
+    }
+
+    .secret-card p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #ffe0eb;
+    }
+
+    /* Actions Header */
+    .btn-action {
+      background: linear-gradient(45deg, #ff4081, #d81b60);
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(255, 64, 129, 0.4);
+      transition: all 0.3s ease;
+      margin-top: 15px;
+    }
+
+    .btn-action:hover {
+      transform: translateY(-3deg) scale(1.03);
+      box-shadow: 0 6px 25px rgba(255, 64, 129, 0.6);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hidden Background Music Player -->
+  <audio id="audioPlayer" src="song.mp3.mp3" loop></audio>
+
+  <canvas id="bgCanvas"></canvas>
+
+  <div class="container">
+    <!-- Main Header -->
+    <header class="header">
+      <h1>Happy Birthday Daniella! ✨</h1>
+      <p class="subhead">Wishing you a day as brilliant & gorgeous as you are 💕</p>
+      <button class="btn-action" onclick="triggerConfetti(); startAudio();">Celebrate Daniella! 🎊</button>
+    </header>
+
+    <!-- Photo Gallery -->
+    <h2 class="section-title">Memories & Moments</h2>
+    <div class="gallery-grid">
+      
+      <!-- Photo Card 1 -->
+      <div class="photo-card" style="--rotation: -3deg;">
+        <div class="img-container">
+          <img id="img1" src="pic1.jpg.jPG" alt="Daniella">
+        </div>
+        <div class="photo-caption">My sexy ahh Queen💕</div>
+      </div>
+
+      <!-- Photo Card 2 -->
+      <div class="photo-card" style="--rotation: 2deg;">
+        <div class="img-container">
+          <img id="img2" src="pic2.jpg.jPG" alt="Daniella">
+        </div>
+        <div class="photo-caption">Dummy🥹✨</div>
+      </div>
+
+      <!-- Photo Card 3 -->
+      <div class="photo-card" style="--rotation: -2deg;">
+        <div class="img-container">
+          <img id="img3" src="pic3.jpg.jPG" alt="Daniella">
+        </div>
+        <div class="photo-caption">Little Kid💖</div>
+      </div>
+
+    </div>
+
+    <!-- Surprise Gift Section -->
+    <h2 class="section-title">A Special Surprise</h2>
+    <div class="gift-section">
+      <div class="gift-box-container" id="giftBox" onclick="openGift()">
+        <div class="gift-box">
+          <div class="gift-lid">
+            <div class="ribbon-v"></div>
+          </div>
+          <div class="gift-body">
+            <div class="ribbon-v"></div>
+            <div class="ribbon-h"></div>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top: 15px; color: #ff80ab; font-size: 0.9rem;">(Click the gift to open!)</p>
+
+      <div class="secret-card" id="secretCard">
+        <h3>Dear Daniella, 💖</h3>
+        <p>Dear Bonnie Black, 💖 Bonnie happy birthdayyyyy🥹, I told u i was gonna do smth special for ur bday and i did itt😂, It's a new age for you i hope u find babe bro u need one😭, i genueily love talking to u and ur one of my fav people everrr, remember that portable joke that made u laugh like mad😂😂😂, shaa, once again Happy Birthday Daniella i wish good health and wealth in this ur new age enjoy day. Also do me 2k for my hard work🥺🥺</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // --- Confetti Effect ---
+    function triggerConfetti() {
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#d81b60', '#ff4081', '#ffd700', '#ffffff']
+        });
+      }
+    }
+
+    // --- Audio Play Setup ---
+    const audioPlayer = document.getElementById('audioPlayer');
+
+    function startAudio() {
+      if (audioPlayer) {
+        audioPlayer.play().catch(e => {
+          console.log("Audio waiting for interaction:", e);
+        });
+      }
+    }
+
+    // Start music on first click anywhere on screen
+    document.addEventListener('click', () => {
+      startAudio();
+    }, { once: true });
+
+    // --- Open Gift Box ---
+    function openGift() {
+      const giftBox = document.getElementById('giftBox');
+      const secretCard = document.getElementById('secretCard');
+      
+      giftBox.classList.add('opened');
+      triggerConfetti();
+      startAudio();
+      
+      setTimeout(() => {
+        secretCard.style.display = 'block';
+      }, 400);
+    }
+
+    // --- Background Particles Animation ---
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let width, height;
+    let particles = [];
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = Math.random() * width;
+        this.y = height + Math.random() * 100;
+        this.size = Math.random() * 3 + 1;
+        this.speedY = Math.random() * 1.5 + 0.5;
+        this.color = `rgba(255, ${Math.floor(Math.random() * 100 + 100)}, ${Math.floor(Math.random() * 150 + 100)}, ${Math.random() * 0.6 + 0.2})`;
+      }
+
+      update() {
+        this.y -= this.speedY;
+        if (this.y < -10) this.reset();
+      }
+
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < 50; i++) {
+      particles.push(new Particle());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
